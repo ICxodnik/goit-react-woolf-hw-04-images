@@ -3,7 +3,7 @@ import ImageGallery from 'components/ImageGallery';
 
 export const App = () => {
   return (
-    <div>
+    <div className="app">
       <SearchBar />
       <ImageGallery />
     </div>
