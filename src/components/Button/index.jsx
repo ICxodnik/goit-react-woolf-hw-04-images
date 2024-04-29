@@ -5,6 +5,10 @@ export default class Button extends Component {
   //   static propTypes = { second: third };
 
   render() {
-    return <div>Button</div>;
+    return (
+      <button className="button load-more hidden" type="button">
+        Load more
+      </button>
+    );
   }
 }

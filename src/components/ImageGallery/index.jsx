@@ -6,10 +6,15 @@ export default class ImageGallery extends Component {
   //   static propTypes = { second: third };
 
   render() {
+    console.log(this.props.images);
     return (
-      <ul className="gallery">
-        <ImageGalleryItem />
-      </ul>
+      <div className="gallery">
+        {/* <ul className="gallery"> */}
+        {this.props.images.map(el => {
+          return <ImageGalleryItem image={el} key={el.id} />;
+        })}
+        ;{/* </ul> */}
+      </div>
     );
   }
 }
