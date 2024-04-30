@@ -3,7 +3,7 @@ import React, { Component } from 'react';
 import { ThreeDots } from 'react-loader-spinner';
 
 export default class Loader extends Component {
-  //   static propTypes = { second: third };
+  static propTypes = { hide: PropTypes.bool };
 
   render() {
     if (this.props.hide) {

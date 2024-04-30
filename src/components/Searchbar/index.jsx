@@ -2,7 +2,7 @@ import PropTypes from 'prop-types';
 import React, { Component } from 'react';
 
 export default class SearchBar extends Component {
-  //   static propTypes = {second: third}
+  static propTypes = { handleQueryChange: PropTypes.func };
 
   handleSearch = e => {
     e.preventDefault();

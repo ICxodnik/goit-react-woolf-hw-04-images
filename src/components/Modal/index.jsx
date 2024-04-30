@@ -2,7 +2,10 @@ import PropTypes from 'prop-types';
 import React, { Component } from 'react';
 
 export default class Modal extends Component {
-  //   static propTypes = {second: third}
+  static propTypes = {
+    modalImage: PropTypes.object,
+    onOverlayClick: PropTypes.func,
+  };
 
   render() {
     if (!this.props.modalImage) {

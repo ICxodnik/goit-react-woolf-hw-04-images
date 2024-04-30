@@ -2,7 +2,7 @@ import PropTypes from 'prop-types';
 import React, { Component } from 'react';
 
 export default class ImageGalleryItem extends Component {
-  //   static propTypes = {second: third}
+  static propTypes = { image: PropTypes.array };
 
   render() {
     let img = this.props.image;
