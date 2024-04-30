@@ -25,6 +25,11 @@
   color:rgb(100, 100, 100);
 }
 
+.gallery-exceptional-info {
+    font-size: 18px;
+    color: rgb(66, 22, 22);
+}
+
 .photo-card {
   flex-grow: 1;
   height: 270px;

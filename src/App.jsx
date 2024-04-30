@@ -14,6 +14,7 @@ export class App extends Component {
     images: [],
     isLoading: false,
     modalImage: null,
+    apiError: '',
   };
 
   componentDidUpdate(prevProps, prevState) {
@@ -35,8 +36,12 @@ export class App extends Component {
 
   handleSearch = async () => {
     this.setState({ isLoading: true });
-    const result = await getItems(this.state.query, this.state.page);
-    this.updateImages(result.data, result.hasNextPage);
+    try {
+      const result = await getItems(this.state.query, this.state.page);
+      this.updateImages(result.data, result.hasNextPage);
+    } catch (ex) {
+      this.setState({ isLoading: false, apiError: ex });
+    }
   };
 
   addImages(result, hasNextPage) {
@@ -48,10 +53,15 @@ export class App extends Component {
       };
     });
   }
+
   handleLoadMore = async () => {
     this.setState({ isLoading: true });
-    const result = await getItems(this.state.query, ++this.state.page);
-    this.addImages(result.data, result.hasNextPage);
+    try {
+      const result = await getItems(this.state.query, ++this.state.page);
+      this.addImages(result.data, result.hasNextPage);
+    } catch (ex) {
+      this.setState({ isLoading: false, apiError: ex });
+    }
   };
 
   handleQueryChange = value => {
@@ -97,6 +107,7 @@ export class App extends Component {
         <ImageGallery
           images={this.state.images}
           onSelected={this.handleOpenModal}
+          apiError={this.state.apiError}
         />
         <Button
           title="Load more"
