@@ -1,6 +1,6 @@
 import axios from "axios";
 
-const perPage = 40;
+const perPage = 10;
 const imgFetcher = axios.create({
     baseURL: 'https://pixabay.com/api/',
     params: {
@@ -22,6 +22,7 @@ export async function getItems(searchValue, page = 1) {
 
     const data = response.data.hits.map(element => {
         return {
+            id: element.id + "_" + Math.random(), //id is not uniq, come dublicates
             previewImageUrl: element.webformatURL,
             largeImageUrl: element.largeImageURL,
             altTags: element.tags,

@@ -1,11 +1,13 @@
 import SearchBar from 'components/Searchbar';
 import ImageGallery from 'components/ImageGallery';
+import Button from 'components/Button';
 import { Component } from 'react';
 import { getItems } from 'services/api';
 
 export class App extends Component {
   state = {
     page: 1,
+    hasNextPage: false,
     query: '',
     images: [],
   };
@@ -18,15 +20,30 @@ export class App extends Component {
       this.handleSearch();
     }
   }
-  updateImages(result) {
+
+  updateImages(result, hasNextPage) {
     this.setState({
       images: result,
+      hasNextPage: hasNextPage,
     });
   }
 
   handleSearch = async () => {
     const result = await getItems(this.state.query, this.state.page);
-    this.updateImages(result.data);
+    this.updateImages(result.data, result.hasNextPage);
+  };
+
+  addImages(result, hasNextPage) {
+    this.setState(prevState => {
+      return {
+        images: prevState.images.concat(result),
+        hasNextPage: hasNextPage,
+      };
+    });
+  }
+  handleLoadMore = async () => {
+    const result = await getItems(this.state.query, ++this.state.page);
+    this.addImages(result.data, result.hasNextPage);
   };
 
   handleQueryChange = value => {
@@ -42,7 +59,12 @@ export class App extends Component {
           // handleSearch={this.handleSearch}
           handleQueryChange={this.handleQueryChange}
         />
-        <ImageGallery images={this.state.images} />
+        {this.state.images && <ImageGallery images={this.state.images} />}
+        <Button
+          title="Load more"
+          handleLoadMore={this.handleLoadMore}
+          hide={!this.state.hasNextPage}
+        />
       </div>
     );
   }
