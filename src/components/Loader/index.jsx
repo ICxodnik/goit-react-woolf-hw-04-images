@@ -5,14 +5,12 @@ import { ThreeDots } from 'react-loader-spinner';
 export default class Loader extends Component {
   //   static propTypes = { second: third };
 
-  getClasses() {
-    let btnClass = 'loader';
-    if (this.props.hide) btnClass += ' hidden';
-    return btnClass;
-  }
   render() {
+    if (this.props.hide) {
+      return;
+    }
     return (
-      <div className={this.getClasses()}>
+      <div className="loader">
         <ThreeDots
           visible={true}
           height="80"

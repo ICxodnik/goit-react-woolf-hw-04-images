@@ -3,7 +3,12 @@ import React, { Component } from 'react';
 import ImageGalleryItem from 'components/ImageGalleryItem';
 
 export default class ImageGallery extends Component {
-  static propTypes = { images: PropTypes.array };
+  static propTypes = { images: PropTypes.array, onSelected: PropTypes.func };
+
+  onClick = e => {
+    const id = e.target.closest('.photo-card').dataset['id'];
+    this.props.onSelected(id);
+  };
 
   render() {
     if (!this.props.images.length) {
@@ -17,7 +22,7 @@ export default class ImageGallery extends Component {
       );
     }
     return (
-      <ul className="gallery">
+      <ul className="gallery" onClick={this.onClick}>
         {this.props.images.map(el => {
           return <ImageGalleryItem image={el} key={el.id} />;
         })}

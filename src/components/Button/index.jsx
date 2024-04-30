@@ -4,16 +4,13 @@ import React, { Component } from 'react';
 export default class Button extends Component {
   //   static propTypes = { second: third };
 
-  getClasses() {
-    let btnClass = 'button load-more';
-    if (this.props.hide) btnClass += ' hidden';
-    return btnClass;
-  }
-
   render() {
+    if (this.props.hide) {
+      return;
+    }
     return (
       <button
-        className={this.getClasses()}
+        className="button load-more"
         type="button"
         onClick={() => {
           this.props.handleLoadMore();

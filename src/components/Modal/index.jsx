@@ -5,12 +5,19 @@ export default class Modal extends Component {
   //   static propTypes = {second: third}
 
   render() {
+    if (!this.props.modalImage) {
+      return;
+    }
     return (
-      <div className="overlay">
+      <>
+        <div className="overlay" onClick={this.props.onOverlayClick}></div>
         <div className="modal">
-          <img src={this.props.src} alt={this.props.alt} />
+          <img
+            src={this.props.modalImage.largeImageUrl}
+            alt={this.props.modalImage.altTags}
+          />
         </div>
-      </div>
+      </>
     );
   }
 }
