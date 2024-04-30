@@ -65,12 +65,21 @@ export class App extends Component {
     this.setState({
       modalImage: image,
     });
+    document.addEventListener('keydown', this.handleEscButton);
+  };
+
+  handleEscButton = e => {
+    if (e.code !== 'Escape') {
+      return;
+    }
+    this.handleCloseModal();
   };
 
   handleCloseModal = () => {
     this.setState({
       modalImage: null,
     });
+    document.removeEventListener('keydown', this.handleEscButton);
   };
 
   render() {
