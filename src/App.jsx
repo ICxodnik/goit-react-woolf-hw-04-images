@@ -9,7 +9,7 @@ import { getItems } from 'services/api';
 
 export class App extends Component {
   state = {
-    page: 1,
+    page: 0,
     hasNextPage: false,
     query: '',
     images: [],
@@ -43,7 +43,7 @@ export class App extends Component {
   handleSearch = async () => {
     this.setState({ isLoading: true });
     try {
-      const result = await getItems(this.state.query, this.state.page);
+      const result = await getItems(this.state.query, ++this.state.page);
       this.updateImages(result.data, result.hasNextPage);
     } catch (ex) {
       this.setState({ isLoading: false, apiError: ex });
@@ -73,6 +73,10 @@ export class App extends Component {
   handleQueryChange = value => {
     this.setState({
       query: value,
+      page: 0,
+      hasNextPage: false,
+      apiError: '',
+      appError: '',
     });
   };
 
