@@ -25,7 +25,6 @@ export class App extends Component {
   }
 
   handleSearch = async () => {
-    console.log(this.state.query);
     const result = await getItems(this.state.query, this.state.page);
     this.updateImages(result.data);
   };

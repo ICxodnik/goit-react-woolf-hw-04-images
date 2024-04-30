@@ -6,8 +6,7 @@ export default class ImageGalleryItem extends Component {
 
   render() {
     return (
-      //   <li className="gallery-item">
-      <div className="photo-card">
+      <li className="photo-card">
         <a className="gallery__link" href={this.props.image.largeImageUrl}>
           <img
             src={this.props.image.previewImageUrl}
@@ -35,8 +34,7 @@ export default class ImageGalleryItem extends Component {
             <span>{this.props.image.downloadCount}</span>
           </p>
         </div>
-      </div>
-      //   </li>
+      </li>
     );
   }
 }

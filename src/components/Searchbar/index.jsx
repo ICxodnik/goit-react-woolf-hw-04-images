@@ -10,7 +10,6 @@ export default class SearchBar extends Component {
   };
 
   handleInput = e => {
-    console.log(e.currentTarget.value);
     this.props.handleQueryChange(e.currentTarget.value);
   };
 

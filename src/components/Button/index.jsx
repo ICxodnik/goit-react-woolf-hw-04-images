@@ -5,9 +5,15 @@ export default class Button extends Component {
   //   static propTypes = { second: third };
 
   render() {
+    let btnClass = 'button load-more';
+    if (this.props.hide) btnClass += ' hidden';
     return (
-      <button className="button load-more hidden" type="button">
-        Load more
+      <button
+        className={btnClass}
+        type="button"
+        onClick="this.props.handleLoadMore"
+      >
+        {this.props.title}
       </button>
     );
   }
