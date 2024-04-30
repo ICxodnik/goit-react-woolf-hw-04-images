@@ -11,19 +11,13 @@ export default class ImageGallery extends Component {
   };
 
   render() {
-    if (this.state.isThisFirstRender) {
-      return (
-        <div className="gallery empty-gallery">
-          <p className="gallery-info">isThisFirstRender</p>
-        </div>
-      );
-    }
     if (this.props.apiError) {
       return (
         <div className="gallery empty-gallery">
           <p className="gallery-exceptional-info">
             Sorry, something went wrong!
           </p>
+          <br />
           <p className="gallery-info">{this.props.apiError}</p>
         </div>
       );

@@ -1,6 +1,7 @@
 import SearchBar from 'components/Searchbar';
 import Loader from 'components/Loader';
 import Modal from 'components/Modal';
+import Error from 'components/Error';
 import ImageGallery from 'components/ImageGallery';
 import Button from 'components/Button';
 import { Component } from 'react';
@@ -15,6 +16,7 @@ export class App extends Component {
     isLoading: false,
     modalImage: null,
     apiError: '',
+    appError: '',
   };
 
   componentDidUpdate(prevProps, prevState) {
@@ -24,6 +26,10 @@ export class App extends Component {
     ) {
       this.handleSearch();
     }
+  }
+
+  componentDidCatch(error) {
+    this.setState({ appError: error });
   }
 
   updateImages(result, hasNextPage) {
@@ -98,6 +104,10 @@ export class App extends Component {
         <Loader hide={!this.state.isLoading} />
         <Modal
           modalImage={this.state.modalImage}
+          onOverlayClick={this.handleCloseModal}
+        />
+        <Error
+          appError={this.state.appError}
           onOverlayClick={this.handleCloseModal}
         />
         <SearchBar

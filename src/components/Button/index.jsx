@@ -2,7 +2,10 @@ import PropTypes from 'prop-types';
 import React, { Component } from 'react';
 
 export default class Button extends Component {
-  //   static propTypes = { second: third };
+  static propTypes = {
+    title: PropTypes.string,
+    handleLoadMore: PropTypes.func,
+  };
 
   render() {
     if (this.props.hide) {
