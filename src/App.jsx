@@ -59,7 +59,7 @@ export class App extends Component {
           // handleSearch={this.handleSearch}
           handleQueryChange={this.handleQueryChange}
         />
-        {this.state.images && <ImageGallery images={this.state.images} />}
+        <ImageGallery images={this.state.images} />
         <Button
           title="Load more"
           handleLoadMore={this.handleLoadMore}

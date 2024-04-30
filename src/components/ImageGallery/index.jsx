@@ -6,6 +6,16 @@ export default class ImageGallery extends Component {
   static propTypes = { images: PropTypes.array };
 
   render() {
+    if (!this.props.images.length) {
+      return (
+        <div className="gallery empty-gallery">
+          <p className="gallery-info">
+            Sorry, there are no images matching your search query. Please try
+            again
+          </p>
+        </div>
+      );
+    }
     return (
       <ul className="gallery">
         {this.props.images.map(el => {

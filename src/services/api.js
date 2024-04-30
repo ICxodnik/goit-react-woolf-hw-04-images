@@ -1,6 +1,6 @@
 import axios from "axios";
 
-const perPage = 10;
+const perPage = 20;
 const imgFetcher = axios.create({
     baseURL: 'https://pixabay.com/api/',
     params: {
