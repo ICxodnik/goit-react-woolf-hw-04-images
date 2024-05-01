@@ -52,13 +52,15 @@ export class App extends Component {
     );
   };
 
-  search = async hasClear => {
+  search = async shouldClear => {
     try {
       const result = await getItems(this.state.query, this.state.page);
 
       this.setState(prevState => {
         return {
-          images: hasClear ? result.data : prevState.images.concat(result.data),
+          images: shouldClear
+            ? result.data
+            : prevState.images.concat(result.data),
           hasNextPage: result.hasNextPage,
           isLoading: false,
         };
