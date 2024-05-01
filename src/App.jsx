@@ -9,7 +9,7 @@ import { getItems } from 'services/api';
 
 export class App extends Component {
   state = {
-    page: 0,
+    page: 1,
     hasNextPage: false,
     query: '',
     images: [],
@@ -19,18 +19,54 @@ export class App extends Component {
     appError: '',
   };
 
-  componentDidUpdate(prevProps, prevState) {
-    if (
-      this.state.page !== prevState.page ||
-      this.state.query !== prevState.query
-    ) {
-      this.handleSearch();
-    }
-  }
-
   componentDidCatch(error) {
     this.setState({ appError: error });
   }
+
+  handleLoadMore = () => {
+    this.setState(prevState => {
+      return {
+        isLoading: true,
+        page: ++prevState.page,
+        hasNextPage: false,
+        apiError: '',
+        appError: '',
+      };
+    });
+    this.search();
+  };
+
+  handleQueryChange = value => {
+    this.setState(
+      {
+        isLoading: true,
+        query: value,
+        page: 1,
+        hasNextPage: false,
+        apiError: '',
+        appError: '',
+      },
+      () => {
+        this.search(true);
+      }
+    );
+  };
+
+  search = async hasClear => {
+    try {
+      const result = await getItems(this.state.query, this.state.page);
+
+      this.setState(prevState => {
+        return {
+          images: hasClear ? result.data : prevState.images.concat(result.data),
+          hasNextPage: result.hasNextPage,
+          isLoading: false,
+        };
+      });
+    } catch (ex) {
+      this.setState({ isLoading: false, apiError: ex });
+    }
+  };
 
   updateImages(result, hasNextPage) {
     this.setState({
@@ -39,16 +75,6 @@ export class App extends Component {
       isLoading: false,
     });
   }
-
-  handleSearch = async () => {
-    this.setState({ isLoading: true });
-    try {
-      const result = await getItems(this.state.query, ++this.state.page);
-      this.updateImages(result.data, result.hasNextPage);
-    } catch (ex) {
-      this.setState({ isLoading: false, apiError: ex });
-    }
-  };
 
   addImages(result, hasNextPage) {
     this.setState(prevState => {
@@ -59,26 +85,6 @@ export class App extends Component {
       };
     });
   }
-
-  handleLoadMore = async () => {
-    this.setState({ isLoading: true });
-    try {
-      const result = await getItems(this.state.query, ++this.state.page);
-      this.addImages(result.data, result.hasNextPage);
-    } catch (ex) {
-      this.setState({ isLoading: false, apiError: ex });
-    }
-  };
-
-  handleQueryChange = value => {
-    this.setState({
-      query: value,
-      page: 0,
-      hasNextPage: false,
-      apiError: '',
-      appError: '',
-    });
-  };
 
   handleOpenModal = id => {
     const image = this.state.images.find(i => i.id === id);
@@ -114,10 +120,7 @@ export class App extends Component {
           appError={this.state.appError}
           onOverlayClick={this.handleCloseModal}
         />
-        <SearchBar
-          // handleSearch={this.handleSearch}
-          handleQueryChange={this.handleQueryChange}
-        />
+        <SearchBar handleQueryChange={this.handleQueryChange} />
         <ImageGallery
           images={this.state.images}
           onSelected={this.handleOpenModal}
