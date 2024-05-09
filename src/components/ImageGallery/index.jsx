@@ -1,43 +1,42 @@
 import PropTypes from 'prop-types';
-import React, { Component } from 'react';
+import React from 'react';
 import ImageGalleryItem from 'components/ImageGalleryItem';
 
-export default class ImageGallery extends Component {
-  static propTypes = { images: PropTypes.array, onSelected: PropTypes.func };
-
-  onClick = e => {
+export default function ImageGallery(props) {
+  const onClick = e => {
     const id = e.target.closest('.photo-card').dataset['id'];
-    this.props.onSelected(id);
+    props.onSelected(id);
   };
 
-  render() {
-    if (this.props.apiError) {
-      return (
-        <div className="gallery empty-gallery">
-          <p className="gallery-exceptional-info">
-            Sorry, something went wrong!
-          </p>
-          <br />
-          <p className="gallery-info">{this.props.apiError}</p>
-        </div>
-      );
-    }
-    if (!this.props.images.length) {
-      return (
-        <div className="gallery empty-gallery">
-          <p className="gallery-info">
-            Sorry, there are no images matching your search query. Please try
-            again
-          </p>
-        </div>
-      );
-    }
+  if (props.apiError) {
     return (
-      <ul className="gallery" onClick={this.onClick}>
-        {this.props.images.map(el => {
-          return <ImageGalleryItem image={el} key={el.id} />;
-        })}
-      </ul>
+      <div className="gallery empty-gallery">
+        <p className="gallery-exceptional-info">Sorry, something went wrong!</p>
+        <br />
+        <p className="gallery-info">{props.apiError}</p>
+      </div>
     );
   }
+  if (!props.images.length) {
+    return (
+      <div className="gallery empty-gallery">
+        <p className="gallery-info">
+          Sorry, there are no images matching your search query. Please try
+          again
+        </p>
+      </div>
+    );
+  }
+  return (
+    <ul className="gallery" onClick={onClick}>
+      {props.images.map(el => {
+        return <ImageGalleryItem image={el} key={el.id} />;
+      })}
+    </ul>
+  );
 }
+
+ImageGallery.propTypes = {
+  images: PropTypes.array,
+  onSelected: PropTypes.func,
+};

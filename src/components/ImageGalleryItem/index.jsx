@@ -1,38 +1,35 @@
 import PropTypes from 'prop-types';
-import React, { Component } from 'react';
+import React from 'react';
 
-export default class ImageGalleryItem extends Component {
-  static propTypes = { image: PropTypes.object };
-
-  render() {
-    let img = this.props.image;
-    return (
-      <li className="photo-card" data-id={img.id}>
-        <img
-          src={img.previewImageUrl}
-          alt={img.altTags}
-          loading="lazy"
-          className="gallery__image"
-        />
-        <div className="info">
-          <p className="info-item">
-            <b>Likes</b>
-            <span>{img.likeCount}</span>
-          </p>
-          <p className="info-item">
-            <b>Views</b>
-            <span>{img.viewCount}</span>
-          </p>
-          <p className="info-item">
-            <b>Comments</b>
-            <span>{img.commentsCount}</span>
-          </p>
-          <p className="info-item">
-            <b>Downloads</b>
-            <span>{img.downloadCount}</span>
-          </p>
-        </div>
-      </li>
-    );
-  }
+export default function ImageGalleryItem({ image }) {
+  return (
+    <li className="photo-card" data-id={image.id}>
+      <img
+        src={image.previewImageUrl}
+        alt={image.altTags}
+        loading="lazy"
+        className="gallery__image"
+      />
+      <div className="info">
+        <p className="info-item">
+          <b>Likes</b>
+          <span>{image.likeCount}</span>
+        </p>
+        <p className="info-item">
+          <b>Views</b>
+          <span>{image.viewCount}</span>
+        </p>
+        <p className="info-item">
+          <b>Comments</b>
+          <span>{image.commentsCount}</span>
+        </p>
+        <p className="info-item">
+          <b>Downloads</b>
+          <span>{image.downloadCount}</span>
+        </p>
+      </div>
+    </li>
+  );
 }
+
+ImageGalleryItem.propTypes = { image: PropTypes.object };
