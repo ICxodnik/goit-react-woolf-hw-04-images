@@ -24,16 +24,20 @@ export class App extends Component {
   }
 
   handleLoadMore = () => {
-    this.setState(prevState => {
-      return {
-        isLoading: true,
-        page: ++prevState.page,
-        hasNextPage: false,
-        apiError: '',
-        appError: '',
-      };
-    });
-    this.search();
+    this.setState(
+      prevState => {
+        return {
+          isLoading: true,
+          page: prevState.page + 1,
+          hasNextPage: false,
+          apiError: '',
+          appError: '',
+        };
+      },
+      () => {
+        this.search();
+      }
+    );
   };
 
   handleQueryChange = value => {
