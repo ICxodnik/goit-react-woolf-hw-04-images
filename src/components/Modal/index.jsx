@@ -1,21 +1,37 @@
 import PropTypes from 'prop-types';
-import React from 'react';
+import React, { Component } from 'react';
 
-export default function Modal(props) {
-  if (!props.modalImage) {
-    return;
+export default class Modal extends Component {
+  handleEscButton = e => {
+    if (e.code !== 'Escape') {
+      return;
+    }
+    this.props.onOverlayClick();
+  };
+
+  componentDidMount() {
+    console.log('mount');
+    document.addEventListener('keydown', this.handleEscButton);
   }
-  return (
-    <>
-      <div className="overlay" onClick={props.onOverlayClick}></div>
-      <div className="modal">
-        <img
-          src={props.modalImage.largeImageUrl}
-          alt={props.modalImage.altTags}
-        />
-      </div>
-    </>
-  );
+
+  componentWillUnmount() {
+    console.log('unmount');
+    document.removeEventListener('keydown', this.handleEscButton);
+  }
+
+  render() {
+    return (
+      <>
+        <div className="overlay" onClick={this.props.onOverlayClick}></div>
+        <div className="modal">
+          <img
+            src={this.props.modalImage.largeImageUrl}
+            alt={this.props.modalImage.altTags}
+          />
+        </div>
+      </>
+    );
+  }
 }
 
 Modal.propTypes = {

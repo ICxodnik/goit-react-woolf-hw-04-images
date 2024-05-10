@@ -97,35 +97,37 @@ export class App extends Component {
     this.setState({
       modalImage: image,
     });
-    document.addEventListener('keydown', this.handleEscButton);
   };
 
-  handleEscButton = e => {
-    if (e.code !== 'Escape') {
-      return;
-    }
-    this.handleCloseModal();
-  };
-
-  handleCloseModal = () => {
+  handleCloseModalImage = () => {
     this.setState({
       modalImage: null,
     });
-    document.removeEventListener('keydown', this.handleEscButton);
+  };
+
+  handleCloseModalError = () => {
+    this.setState({
+      apiError: '',
+      appError: '',
+    });
   };
 
   render() {
     return (
       <div className="app">
         <Loader hide={!this.state.isLoading} />
-        <Modal
-          modalImage={this.state.modalImage}
-          onOverlayClick={this.handleCloseModal}
-        />
-        <Error
-          appError={this.state.appError}
-          onOverlayClick={this.handleCloseModal}
-        />
+        {this.state.modalImage && (
+          <Modal
+            modalImage={this.state.modalImage}
+            onOverlayClick={this.handleCloseModalImage}
+          />
+        )}
+        {this.state.appError && (
+          <Error
+            appError={this.state.appError}
+            onOverlayClick={this.handleCloseModalError}
+          />
+        )}
         <SearchBar handleQueryChange={this.handleQueryChange} />
         <ImageGallery
           images={this.state.images}
