@@ -1,35 +1,28 @@
 import PropTypes from 'prop-types';
-import React, { Component } from 'react';
-export default class Error extends Component {
-  handleEscButton = e => {
+import React, { useEffect } from 'react';
+export default function Error(props) {
+  const handleEscButton = e => {
     if (e.code !== 'Escape') {
       return;
     }
-    this.props.onOverlayClick();
+    props.onOverlayClick();
   };
 
-  componentDidMount() {
-    document.addEventListener('keydown', this.handleEscButton);
-  }
+  useEffect(() => {
+    document.addEventListener('keydown', handleEscButton);
+    return () => document.removeEventListener('keydown', handleEscButton);
+  }, []);
 
-  componentWillUnmount() {
-    document.removeEventListener('keydown', this.handleEscButton);
-  }
-  render() {
-    if (!this.props.appError.length) {
-      return;
-    }
-    return (
-      <>
-        <div className="overlay" onClick={this.props.onOverlayClick}></div>
-        <div className="modal">
-          Something went wrong!
-          <br />
-          {this.props.appError}
-        </div>
-      </>
-    );
-  }
+  return (
+    <>
+      <div className="overlay" onClick={props.onOverlayClick}></div>
+      <div className="modal">
+        Something went wrong!
+        <br />
+        {props.message}
+      </div>
+    </>
+  );
 }
 
 Error.propTypes = {

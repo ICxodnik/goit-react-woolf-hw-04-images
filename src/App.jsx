@@ -4,142 +4,92 @@ import Modal from 'components/Modal';
 import Error from 'components/Error';
 import ImageGallery from 'components/ImageGallery';
 import Button from 'components/Button';
-import { Component } from 'react';
 import { getItems } from 'services/api';
+import { useState, useEffect } from 'react';
 
-export class App extends Component {
-  state = {
-    page: 1,
-    hasNextPage: false,
-    query: '',
-    images: [],
-    isLoading: false,
-    modalImage: null,
-    apiError: '',
-    appError: '',
+export function App() {
+  const [page, setPage] = useState(1);
+  const [hasNextPage, setHasNextPage] = useState(false);
+  const [query, setQuery] = useState('');
+  const [images, setImages] = useState([]);
+  const [isLoading, setIsLoading] = useState(false);
+  const [modalImage, setModalImage] = useState(null);
+  const [apiError, setApiError] = useState('');
+  const [appError, setAppError] = useState('');
+
+  const handleLoadMore = () => {
+    setPage(page + 1);
+
+    setIsLoading(true);
+    setHasNextPage(false);
+    setApiError('');
+    setAppError('');
   };
 
-  componentDidCatch(error) {
-    this.setState({ appError: error });
-  }
+  useEffect(() => {
+    search();
+  }, [query, page]);
 
-  handleLoadMore = () => {
-    this.setState(
-      prevState => {
-        return {
-          isLoading: true,
-          page: prevState.page + 1,
-          hasNextPage: false,
-          apiError: '',
-          appError: '',
-        };
-      },
-      () => {
-        this.search();
-      }
-    );
+  const handleQueryChange = value => {
+    setPage(1);
+    setQuery(value);
+
+    setIsLoading(true);
+    setHasNextPage(false);
+    setApiError('');
+    setAppError('');
   };
 
-  handleQueryChange = value => {
-    this.setState(
-      {
-        isLoading: true,
-        query: value,
-        page: 1,
-        hasNextPage: false,
-        apiError: '',
-        appError: '',
-      },
-      () => {
-        this.search(true);
-      }
-    );
-  };
-
-  search = async shouldClear => {
+  const search = async () => {
     try {
-      const result = await getItems(this.state.query, this.state.page);
-
-      this.setState(prevState => {
-        return {
-          images: shouldClear
-            ? result.data
-            : prevState.images.concat(result.data),
-          hasNextPage: result.hasNextPage,
-          isLoading: false,
-        };
-      });
+      const result = await getItems(query, page);
+      const shouldClear = page === 1;
+      setImages(shouldClear ? result.data : images.concat(result.data));
+      setHasNextPage(result.hasNextPage);
+      setIsLoading(false);
     } catch (ex) {
-      this.setState({ isLoading: false, apiError: ex });
+      setIsLoading(false);
+      setApiError(ex);
     }
   };
 
-  updateImages(result, hasNextPage) {
-    this.setState({
-      images: result,
-      hasNextPage: hasNextPage,
-      isLoading: false,
-    });
-  }
-
-  addImages(result, hasNextPage) {
-    this.setState(prevState => {
-      return {
-        images: prevState.images.concat(result),
-        hasNextPage: hasNextPage,
-        isLoading: false,
-      };
-    });
-  }
-
-  handleOpenModal = id => {
-    const image = this.state.images.find(i => i.id === id);
-    this.setState({
-      modalImage: image,
-    });
+  const handleOpenModal = id => {
+    const image = images.find(i => i.id === id);
+    setModalImage(image);
   };
 
-  handleCloseModalImage = () => {
-    this.setState({
-      modalImage: null,
-    });
+  const handleCloseModalImage = () => {
+    setModalImage(null);
   };
 
-  handleCloseModalError = () => {
-    this.setState({
-      apiError: '',
-      appError: '',
-    });
+  const handleCloseModalError = () => {
+    setApiError('');
+    setAppError('');
   };
 
-  render() {
-    return (
-      <div className="app">
-        <Loader hide={!this.state.isLoading} />
-        {this.state.modalImage && (
-          <Modal
-            modalImage={this.state.modalImage}
-            onOverlayClick={this.handleCloseModalImage}
-          />
-        )}
-        {this.state.appError && (
-          <Error
-            appError={this.state.appError}
-            onOverlayClick={this.handleCloseModalError}
-          />
-        )}
-        <SearchBar handleQueryChange={this.handleQueryChange} />
-        <ImageGallery
-          images={this.state.images}
-          onSelected={this.handleOpenModal}
-          apiError={this.state.apiError}
+  return (
+    <div className="app">
+      <Loader hide={!isLoading} />
+      {modalImage && (
+        <Modal modalImage={modalImage} onOverlayClick={handleCloseModalImage} />
+      )}
+      {(appError || apiError) && (
+        <Error
+          message={appError || apiError}
+          onOverlayClick={handleCloseModalError}
         />
-        <Button
-          title="Load more"
-          handleLoadMore={this.handleLoadMore}
-          hide={!this.state.hasNextPage}
-        />
-      </div>
-    );
-  }
+      )}
+      <SearchBar handleQueryChange={handleQueryChange} />
+      <ImageGallery
+        images={images}
+        onSelected={handleOpenModal}
+        apiError={apiError}
+      />
+      <Button
+        title="Load more"
+        handleLoadMore={handleLoadMore}
+        hide={!hasNextPage}
+      />
+    </div>
+  );
 }
