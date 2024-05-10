@@ -2,18 +2,18 @@ import PropTypes from 'prop-types';
 import React from 'react';
 
 export default function SearchBar(props) {
-  // const handleSearch = e => {
-  //   e.preventDefault();
-  //   props.handleSearch();
-  // };
-
-  const handleInput = e => {
+  const handleSearch = e => {
+    e.preventDefault();
     props.handleQueryChange(e.currentTarget.value);
   };
 
+  // const handleInput = e => {
+  //   props.handleQueryChange(e.currentTarget.value);
+  // };
+
   return (
     <header>
-      <form className="search-form">
+      <form className="search-form" onSubmit={handleSearch}>
         <input
           name="searchQuery"
           className="search-input"
@@ -21,11 +21,10 @@ export default function SearchBar(props) {
           autoComplete="off"
           autoFocus
           placeholder="Search images and photos"
-          onChange={handleInput}
         />
-        {/* <button type="submit" className="button" onClick={handleSearch}>
-            <span className="button-label">Search</span>
-          </button> */}
+        <button type="submit" className="button">
+          <span className="button-label">Search</span>
+        </button>
       </form>
     </header>
   );
