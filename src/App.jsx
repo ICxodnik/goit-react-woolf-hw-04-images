@@ -77,12 +77,12 @@ export function App() {
     <div className="app">
       <Loader hide={!isLoading} />
       {modalImage && (
-        <Modal modalImage={modalImage} onOverlayClick={handleCloseModalImage} />
+        <Modal modalImage={modalImage} onModalClosing={handleCloseModalImage} />
       )}
       {(appError || apiError) && (
         <Error
           message={appError || apiError}
-          onOverlayClick={handleCloseModalError}
+          onModalClosing={handleCloseModalError}
         />
       )}
       <SearchBar handleQueryChange={handleQueryChange} />

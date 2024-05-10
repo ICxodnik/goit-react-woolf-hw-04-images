@@ -1,7 +1,7 @@
 import PropTypes from 'prop-types';
 import React, { useEffect } from 'react';
 
-export default function Modal({ onOverlayClick, modalImage }) {
+export default function Modal({ onModalClosing, modalImage }) {
   useEffect(() => {
     document.addEventListener('keydown', handleEscButton);
 
@@ -12,13 +12,13 @@ export default function Modal({ onOverlayClick, modalImage }) {
       if (e.code !== 'Escape') {
         return;
       }
-      onOverlayClick();
+      onModalClosing();
     }
-  }, [onOverlayClick]);
+  }, [onModalClosing]);
 
   return (
     <>
-      <div className="overlay" onClick={onOverlayClick}></div>
+      <div className="overlay" onClick={onModalClosing}></div>
       <div className="modal">
         <img src={modalImage.largeImageUrl} alt={modalImage.altTags} />
       </div>
@@ -28,5 +28,5 @@ export default function Modal({ onOverlayClick, modalImage }) {
 
 Modal.propTypes = {
   modalImage: PropTypes.object,
-  onOverlayClick: PropTypes.func,
+  onModalClosing: PropTypes.func,
 };
