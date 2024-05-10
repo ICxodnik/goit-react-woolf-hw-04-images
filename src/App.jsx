@@ -23,17 +23,6 @@ export class App extends Component {
     this.setState({ appError: error });
   }
 
-  // componentDidUpdate(prevProps, prevState) {
-  //   if (
-  //     this.state.page !== prevState.page ||
-  //     this.state.query !== prevState.query
-  //   ) {
-  //     this.search(true);
-  //     OR
-  //     this.search();
-  //   }
-  // }
-
   handleLoadMore = () => {
     this.setState(
       prevState => {
@@ -45,7 +34,6 @@ export class App extends Component {
           appError: '',
         };
       },
-      //використовую callback setState замість методів життєвого циклу
       () => {
         this.search();
       }
@@ -62,7 +50,6 @@ export class App extends Component {
         apiError: '',
         appError: '',
       },
-      //використовую callback setState замість методів життєвого циклу
       () => {
         this.search(true);
       }
@@ -105,9 +92,6 @@ export class App extends Component {
     });
   }
 
-  //id зберігається в dataset
-  //з часом потрібно буде змінювати які дані потрібно відобразити в попапі,
-  // пошук по id більш довгострокове та оптимальне рішення ніж зберігати всі дані в dataset
   handleOpenModal = id => {
     const image = this.state.images.find(i => i.id === id);
     this.setState({

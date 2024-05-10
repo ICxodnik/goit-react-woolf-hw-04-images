@@ -4,7 +4,9 @@ import React from 'react';
 export default function SearchBar(props) {
   const handleSearch = e => {
     e.preventDefault();
-    props.handleQueryChange(e.currentTarget.value);
+    var formEl = document.forms.searchForm;
+    var formData = new FormData(formEl).get('searchQuery');
+    props.handleQueryChange(formData);
   };
 
   // const handleInput = e => {
@@ -13,7 +15,7 @@ export default function SearchBar(props) {
 
   return (
     <header>
-      <form className="search-form" onSubmit={handleSearch}>
+      <form className="search-form" onSubmit={handleSearch} id="searchForm">
         <input
           name="searchQuery"
           className="search-input"
@@ -21,6 +23,7 @@ export default function SearchBar(props) {
           autoComplete="off"
           autoFocus
           placeholder="Search images and photos"
+          // onChange={handleInput}
         />
         <button type="submit" className="button">
           <span className="button-label">Search</span>
