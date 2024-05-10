@@ -28,7 +28,20 @@ export function App() {
 
   useEffect(() => {
     search();
-  }, [query, page]);
+
+    async function search() {
+      try {
+        const result = await getItems(query, page);
+        const shouldClear = page === 1;
+        setImages(shouldClear ? result.data : images.concat(result.data));
+        setHasNextPage(result.hasNextPage);
+        setIsLoading(false);
+      } catch (ex) {
+        setIsLoading(false);
+        setApiError(ex);
+      }
+    }
+  }, [query, page, images]);
 
   const handleQueryChange = value => {
     setPage(1);
@@ -38,19 +51,6 @@ export function App() {
     setHasNextPage(false);
     setApiError('');
     setAppError('');
-  };
-
-  const search = async () => {
-    try {
-      const result = await getItems(query, page);
-      const shouldClear = page === 1;
-      setImages(shouldClear ? result.data : images.concat(result.data));
-      setHasNextPage(result.hasNextPage);
-      setIsLoading(false);
-    } catch (ex) {
-      setIsLoading(false);
-      setApiError(ex);
-    }
   };
 
   const handleOpenModal = id => {
