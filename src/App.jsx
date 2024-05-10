@@ -8,7 +8,8 @@ import { getItems } from 'services/api';
 import { useState, useEffect } from 'react';
 
 export function App() {
-  const [page, setPage] = useState(1);
+  const initialPage = 1;
+  const [page, setPage] = useState(initialPage);
   const [hasNextPage, setHasNextPage] = useState(false);
   const [query, setQuery] = useState('');
   const [images, setImages] = useState([]);
@@ -26,25 +27,8 @@ export function App() {
     setAppError('');
   };
 
-  useEffect(() => {
-    search();
-
-    async function search() {
-      try {
-        const result = await getItems(query, page);
-        const shouldClear = page === 1;
-        setImages(shouldClear ? result.data : images.concat(result.data));
-        setHasNextPage(result.hasNextPage);
-        setIsLoading(false);
-      } catch (ex) {
-        setIsLoading(false);
-        setApiError(ex);
-      }
-    }
-  }, [query, page, images]);
-
   const handleQueryChange = value => {
-    setPage(1);
+    setPage(initialPage);
     setQuery(value);
 
     setIsLoading(true);
@@ -52,6 +36,28 @@ export function App() {
     setApiError('');
     setAppError('');
   };
+
+  useEffect(() => {
+    search();
+
+    async function search() {
+      try {
+        const result = await getItems(query, page);
+
+        setImages(images => {
+          if (page === initialPage) {
+            return result.data;
+          }
+          return images.concat(result.data);
+        });
+        setHasNextPage(result.hasNextPage);
+        setIsLoading(false);
+      } catch (ex) {
+        setIsLoading(false);
+        setApiError(ex);
+      }
+    }
+  }, [query, page]);
 
   const handleOpenModal = id => {
     const image = images.find(i => i.id === id);
