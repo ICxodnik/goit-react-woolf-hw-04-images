@@ -135,9 +135,9 @@ header {
 }
 
 .modal {
-  position: absolute;
-  top: 50%;
-  left: 50%;
+  position: fixed;
+  top: 50vh;
+  left: 50vw;
   z-index: 100;
   padding: 15px;
   min-width: 375px;
